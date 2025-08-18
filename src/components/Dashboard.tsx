@@ -1,18 +1,19 @@
-import React from 'react';
-import { useWebSocket } from '../hooks/useWebSocket';
-import { ConnectionStatus } from './ConnectionStatus';
-import { SymbolInput } from './SymbolInput';
-import { StockTable } from './StockTable';
-import { BarChart3 } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useWebSocket } from "../hooks/useWebSocket";
+import { ConnectionStatus } from "./ConnectionStatus";
+import { SymbolInput } from "./SymbolInput";
+import { StockTable } from "./StockTable";
+import { BarChart3 } from "lucide-react";
 
 export const Dashboard: React.FC = () => {
-  const { 
-    isConnected, 
-    stockData, 
-    connectionError, 
-    subscribe, 
-    unsubscribe, 
-    reconnect 
+  const {
+    isConnected,
+    stockData,
+    connectionError,
+    subscribe,
+    unsubscribe,
+    reconnect,
   } = useWebSocket();
 
   const subscribedSymbols = Object.keys(stockData);
@@ -30,12 +31,21 @@ export const Dashboard: React.FC = () => {
               Stock Comparison Dashboard
             </h1>
           </div>
-          <p className="text-gray-600 text-lg">Compare live market data for up to 2 stocks side by side</p>
+          <p className="text-gray-600 text-lg">
+            Compare live market data for up to 2 stocks side by side
+          </p>
+        </div>
+        <div className="absolute top-10 right-10">
+          <Link to={"/difference"}>
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-md">
+              List of Stocks
+            </button>
+          </Link>
         </div>
 
         {/* Connection Status */}
         <div className="flex justify-center mb-8">
-          <ConnectionStatus 
+          <ConnectionStatus
             isConnected={isConnected}
             error={connectionError}
             onReconnect={reconnect}
@@ -53,15 +63,14 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Stock Data Table */}
-        <StockTable 
-          stockData={stockData}
-          symbols={subscribedSymbols}
-        />
+        <StockTable stockData={stockData} symbols={subscribedSymbols} />
 
         {/* Instructions */}
         {subscribedSymbols.length === 0 && (
           <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-blue-800 mb-2">Getting Started</h3>
+            <h3 className="text-lg font-semibold text-blue-800 mb-2">
+              Getting Started
+            </h3>
             <ul className="text-blue-700 space-y-1 text-sm">
               <li>• Enter up to 2 stock symbols (e.g., OGDC, PPL, BATA)</li>
               <li>• Watch live price updates in real-time</li>

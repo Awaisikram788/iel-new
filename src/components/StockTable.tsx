@@ -25,6 +25,7 @@ export const StockTable: React.FC<StockTableProps> = ({
     });
   };
 
+  console.log(stockData);
   const formatVolume = (volume: number): string => {
     if (volume >= 1000000) {
       return `${(volume / 1000000).toFixed(1)}M`;
@@ -129,7 +130,9 @@ export const StockTable: React.FC<StockTableProps> = ({
                     {result.check !== "No Trade" && (
                       <>
                         <div className="text-white">Long: {result.long}</div>
-                        <div className="text-white ms-4">Short: {result.short}</div>
+                        <div className="text-white ms-4">
+                          Short: {result.short}
+                        </div>
                         <div
                           className={`font-medium ms-4 ${
                             result.difference &&
@@ -328,6 +331,53 @@ export const StockTable: React.FC<StockTableProps> = ({
                 );
               })}
             </tr>
+
+            {/* <tr className="hover:bg-gray-50 transition-colors">
+              <td className="px-6 py-4 text-sm font-medium text-gray-700">
+                Ask Volume / BP Volume
+              </td>
+              {symbols.map((symbol) => {
+                const stock = stockData[symbol];
+                return (
+                  <td key={symbol} className="px-6 py-4 text-center text-sm">
+                    {stock ? (
+                      <div className="space-y-1">
+                        <div
+                          className={`font-medium ${
+                            stock.AskVolume && stock.AskVolume > 0
+                              ? "text-green-600"
+                              : stock.AskVolume && stock.AskVolume < 0
+                              ? "text-red-600"
+                              : "text-gray-600"
+                          }`}
+                        >
+                          Ask:{" "}
+                          {stock.AskVolume
+                            ? `${stock.AskVolume.toFixed(4)}%`
+                            : "N/A"}
+                        </div>
+                        <div
+                          className={`font-medium ${
+                            stock.BpVolume && stock.BpVolume > 0
+                              ? "text-green-600"
+                              : stock.BpVolume && stock.BpVolume < 0
+                              ? "text-red-600"
+                              : "text-gray-600"
+                          }`}
+                        >
+                          BP:{" "}
+                          {stock.BpVolume
+                            ? `${stock.BpVolume.toFixed(4)}%`
+                            : "N/A"}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-gray-400">-</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr> */}
 
             {/* Ask Return / BP Return */}
             <tr className="hover:bg-gray-50 transition-colors">

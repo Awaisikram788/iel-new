@@ -56,7 +56,9 @@ export const useWebSocket = () => {
                                 lastUpdate: tickData.formatted_time || new Date().toLocaleTimeString(),
                                 isConnected: true,
                                 askReturn: tickData.ask_return,
-                                bpReturn: tickData.bp_return
+                                bpReturn: tickData.bp_return,
+                                AskVolume:tickData.av,
+                                BpVolume:tickData.bv
                             }
                         }));
                     }
