@@ -190,6 +190,28 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData, symbols }) =>
                             );
                         })}
                     </tr>
+                    <tr className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-700">Ask Return / BP Return</td>
+                        {symbols.map(symbol => {
+                            const stock = stockData[symbol];
+                            return (
+                                <td key={symbol} className="px-6 py-4 text-center text-sm">
+                                    {stock ? (
+                                        <div className="space-y-1">
+                                            <div className={`font-medium ${stock.askReturn && stock.askReturn > 0 ? 'text-green-600' : stock.askReturn && stock.askReturn < 0 ? 'text-red-600' : 'text-gray-600'}`}>
+                                                Ask: {stock.askReturn ? `${stock.askReturn.toFixed(4)}%` : 'N/A'}
+                                            </div>
+                                            <div className={`font-medium ${stock.bpReturn && stock.bpReturn > 0 ? 'text-green-600' : stock.bpReturn && stock.bpReturn < 0 ? 'text-red-600' : 'text-gray-600'}`}>
+                                                BP: {stock.bpReturn ? `${stock.bpReturn.toFixed(4)}%` : 'N/A'}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <span className="text-gray-400">-</span>
+                                    )}
+                                </td>
+                            );
+                        })}
+                    </tr>
 
                     {/* Last Update */}
                     <tr className="hover:bg-gray-50 transition-colors">
@@ -214,28 +236,7 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData, symbols }) =>
                     </tr>
                     </tbody>
                     {/* Ask Return / BP Return */}
-                    <tr className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 text-sm font-medium text-gray-700">Ask Return / BP Return</td>
-                        {symbols.map(symbol => {
-                            const stock = stockData[symbol];
-                            return (
-                                <td key={symbol} className="px-6 py-4 text-center text-sm">
-                                    {stock ? (
-                                        <div className="space-y-1">
-                                            <div className={`font-medium ${stock.askReturn && stock.askReturn > 0 ? 'text-green-600' : stock.askReturn && stock.askReturn < 0 ? 'text-red-600' : 'text-gray-600'}`}>
-                                                Ask: {stock.askReturn ? `${stock.askReturn.toFixed(4)}%` : 'N/A'}
-                                            </div>
-                                            <div className={`font-medium ${stock.bpReturn && stock.bpReturn > 0 ? 'text-green-600' : stock.bpReturn && stock.bpReturn < 0 ? 'text-red-600' : 'text-gray-600'}`}>
-                                                BP: {stock.bpReturn ? `${stock.bpReturn.toFixed(4)}%` : 'N/A'}
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <span className="text-gray-400">-</span>
-                                    )}
-                                </td>
-                            );
-                        })}
-                    </tr>
+
                 </table>
             </div>
         </div>
