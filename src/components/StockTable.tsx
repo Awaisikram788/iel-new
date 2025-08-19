@@ -332,7 +332,7 @@ export const StockTable: React.FC<StockTableProps> = ({
               })}
             </tr>
 
-            {/* <tr className="hover:bg-gray-50 transition-colors">
+            <tr className="hover:bg-gray-50 transition-colors">
               <td className="px-6 py-4 text-sm font-medium text-gray-700">
                 Ask Volume / BP Volume
               </td>
@@ -353,7 +353,7 @@ export const StockTable: React.FC<StockTableProps> = ({
                         >
                           Ask:{" "}
                           {stock.AskVolume
-                            ? `${stock.AskVolume.toFixed(4)}%`
+                            ? `${stock.AskVolume}`
                             : "N/A"}
                         </div>
                         <div
@@ -367,7 +367,7 @@ export const StockTable: React.FC<StockTableProps> = ({
                         >
                           BP:{" "}
                           {stock.BpVolume
-                            ? `${stock.BpVolume.toFixed(4)}%`
+                            ? `${stock.BpVolume}`
                             : "N/A"}
                         </div>
                       </div>
@@ -377,7 +377,7 @@ export const StockTable: React.FC<StockTableProps> = ({
                   </td>
                 );
               })}
-            </tr> */}
+            </tr>
 
             {/* Ask Return / BP Return */}
             <tr className="hover:bg-gray-50 transition-colors">
