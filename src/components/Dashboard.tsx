@@ -35,13 +35,27 @@ export const Dashboard: React.FC = () => {
             Compare live market data for up to 2 stocks side by side
           </p>
         </div>
-        <div className="absolute top-10 right-10">
-          <Link to={"/difference"}>
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-md">
-              List of Stocks
-            </button>
-          </Link>
-        </div>
+      <div className="absolute top-10 right-10">
+  <div className="flex flex-col">
+    <Link to="/difference?type=200">
+      <button className="bg-blue-600 text-white px-6 py-2 rounded-md">
+        List of Stocks 200
+      </button>
+    </Link>
+
+    <Link to="/difference?type=100">
+      <button className="bg-blue-600 text-white px-6 py-2 rounded-md mt-1">
+        List of Stocks 100
+      </button>
+    </Link>
+
+    <Link to="/difference?type=65">
+      <button className="bg-blue-600 text-white px-6 py-2 rounded-md mt-1">
+        List of Stocks 65
+      </button>
+    </Link>
+  </div>
+</div>
 
         {/* Connection Status */}
         <div className="flex justify-center mb-8">

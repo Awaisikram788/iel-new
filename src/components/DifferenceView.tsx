@@ -1,7 +1,9 @@
+// Assuming the buttons are in a parent component or a separate file
 import React, { useState, useEffect } from "react";
 import { TrendingUp, TrendingDown, Minus, BarChart3 } from "lucide-react";
 import { useWebSocket } from "../hooks/useWebSocket";
 import { StockData } from "../types/stock";
+import { useLocation } from "react-router-dom";
 
 interface TradeResult {
   check: string;
@@ -10,6 +12,7 @@ interface TradeResult {
   difference: string | null;
 }
 
+// Define stock pair arrays
 const stockPairs = [
   ["GLAXO", "UNITY"],
   ["GLAXO", "PPL"],
@@ -38,21 +41,74 @@ const stockPairs = [
   ["NBP", "SYS"],
 ];
 
+const stockPairs200 = [
+  ["OGDC", "PPL"],
+  ["PPL", "PSO"],
+  ["NRL", "PRL"],
+  ["AVN", "OCTOPUS"],
+];
+
+const stockPairs100 = [
+  ["PPL", "PSO"],
+  ["OGDC", "PSO"],
+  ["OGDC", "PPL"],
+  ["GAL", "GHNI"],
+  ["NRL", "PRL"],
+  ["FCCL", "POWER"],
+];
+
+const stockPairs65 = [
+  ["PPL", "PSO"],
+  ["OGDC", "PPL"],
+  ["OGDC", "PSO"],
+  ["GAL", "GHNI"],
+  ["GLAXO", "PPL"],
+  ["FCCL", "POWER"],
+  ["FFL", "SNGP"],
+  ["FCEPL", "FFL"],
+  ["OGDC", "SYS"],
+  ["FFL", "PAEL"],
+  ["CNERGY", "FFL"],
+  ["GLAXO", "UNITY"],
+  ["AGP", "GLAXO"],
+  ["CPHL", "SEARL"],
+  ["DFML", "SSGC"],
+  ["DGKC", "PAEL"],
+  ["FEROZ", "SNGP"],
+  ["NBP", "SYS"],
+];
+
+// Map stock pair types to their respective arrays
+const stockPairMap = {
+  default: stockPairs,
+  "200": stockPairs200,
+  "100": stockPairs100,
+  "65": stockPairs65,
+};
+
 export const StockDifferenceTable: React.FC = () => {
   const { isConnected, stockData, subscribe, unsubscribe } = useWebSocket();
   const [subscribedSymbols, setSubscribedSymbols] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
+  const location = useLocation();
 
-  // Subscribe to all symbols in stockPairs on mount
+  // Get the stock pair type from the query parameter
+  const queryParams = new URLSearchParams(location.search);
+  const stockPairType = queryParams.get("type") || "default";
+
+  // Select the appropriate stock pair array
+  const selectedStockPairs = stockPairMap[stockPairType as keyof typeof stockPairMap] || stockPairs;
+
+  // Subscribe to all symbols in the selected stock pairs on mount
   useEffect(() => {
-    const symbols = Array.from(new Set(stockPairs.flat()));
+    const symbols = Array.from(new Set(selectedStockPairs.flat()));
     symbols.forEach((symbol) => subscribe(symbol));
     setSubscribedSymbols(symbols);
 
     return () => {
       symbols.forEach((symbol) => unsubscribe(symbol));
     };
-  }, [subscribe, unsubscribe]);
+  }, [subscribe, unsubscribe, selectedStockPairs]);
 
   const formatNumber = (num: number, decimals: number = 2): string => {
     return num.toLocaleString("en-US", {
@@ -104,7 +160,7 @@ export const StockDifferenceTable: React.FC = () => {
   };
 
   const tradeDecisions: Record<string, TradeResult> = {};
-  stockPairs.forEach(([symbol1, symbol2]) => {
+  selectedStockPairs.forEach(([symbol1, symbol2]) => {
     const stock1 = stockData[symbol1];
     const stock2 = stockData[symbol2];
     if (stock1 && stock2) {
@@ -114,9 +170,9 @@ export const StockDifferenceTable: React.FC = () => {
   });
 
   // Sort stock pairs based on difference
-  const sortedStockPairs = [...stockPairs].sort((a, b) => {
+  const sortedStockPairs = [...selectedStockPairs].sort((a, b) => {
     if (!sortOrder) return 0;
-    
+
     const tradeResultA = tradeDecisions[`${a[0]}-${a[1]}`] || {
       difference: null,
     };
@@ -124,8 +180,12 @@ export const StockDifferenceTable: React.FC = () => {
       difference: null,
     };
 
-    const diffA = tradeResultA.difference ? parseFloat(tradeResultA.difference) : -Infinity;
-    const diffB = tradeResultB.difference ? parseFloat(tradeResultB.difference) : -Infinity;
+    const diffA = tradeResultA.difference
+      ? parseFloat(tradeResultA.difference)
+      : -Infinity;
+    const diffB = tradeResultB.difference
+      ? parseFloat(tradeResultB.difference)
+      : -Infinity;
 
     if (sortOrder === "asc") {
       return diffA - diffB;
@@ -180,8 +240,12 @@ export const StockDifferenceTable: React.FC = () => {
               <tr className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
                 <th className="py-3 px-4 text-left">Stock 1</th>
                 <th className="py-3 px-4 text-left">Stock 2</th>
-                <th className="py-3 px-4 text-left cursor-pointer" onClick={handleSort}>
-                  Trade Decision {sortOrder === "desc" ? "↓" : sortOrder === "asc" ? "↑" : ""}
+                <th
+                  className="py-3 px-4 text-left cursor-pointer"
+                  onClick={handleSort}
+                >
+                  Trade Decision{" "}
+                  {sortOrder === "desc" ? "↓" : sortOrder === "asc" ? "↑" : ""}
                 </th>
               </tr>
             </thead>
