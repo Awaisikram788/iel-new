@@ -15,7 +15,7 @@ export const useWebSocket = () => {
         }
 
         try {
-            const ws = new WebSocket('ws://3.149.87.178:8000/ws/market/feed/');
+            const ws = new WebSocket('ws://3.145.178.60:8000/ws/market/feed/');
 
             ws.onopen = () => {
                 setIsConnected(true);
